@@ -36,6 +36,18 @@ def main():
         return
         
     p = PartialAssigned(mat,n)
-    print(BnB(p,float('inf')))
+    solution, U = BnB(p,float('inf'))
+    
+    # test if the cost of the solution is properly calculated
+    
+    prev = None
+    actualCost = 0
+    for v in solution:
+        if prev is not None:
+            actualCost += mat[prev][v]
+        prev = v
+    if abs(actualCost-U)>0.0001:
+        raise Exception("The difference of actualCost and BnB is {}".format(abs(actualCost-U)))
+    
 if __name__ == "__main__":
     main()
