@@ -31,6 +31,10 @@ def main():
         filename = 'tsp-problem-10-5-10-1-1.txt'
     n,k,u,v = map(int,filename.split('-')[2:6])
     mat = parseMatrix(filename,n)
+    # error occurs
+    if not mat:
+        return
+        
     p = PartialAssigned(mat,n)
     print(BnB(p,float('inf')))
 if __name__ == "__main__":

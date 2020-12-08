@@ -41,13 +41,20 @@ class PartialAssigned:
         self.vars[step] = value
         if step!=0:
             self.currentCost = self.currentCost - prevCost + self.cost_dict[self.vars[step-1]][value]
+
+            
         self.curStep = step + 1
 
     def unassignVariable(self,step: int):
         if step>0:
             self.currentCost -= self.cost_dict[self.vars[step-1]][self.vars[step]]
+            # avoid errors from float pointer calculation
+            if abs(self.currentCost)<0.00001:
+                self.currentCost = 0
+
+
         self.vars[step] = None
-        # print(self.cost_dict[self.vars[step-1]][self.vars[step]],step-1,step)
+        
 
         self.curStep = step-1 
 
