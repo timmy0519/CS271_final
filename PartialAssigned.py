@@ -21,19 +21,35 @@ class PartialAssigned:
     
     def pickUnAssignedVariable(self):
         return self.curStep
-    def getPossibledomain(self,curStep: int):
-        return set( i for i,v in enumerate(self.vars[:curStep]) if v is not None)
-    def orderedDomainValues(self,curStep:int):
-        pass
-    def assignVariable(self,curStep: int, value: int):
-        self.vars[curStep] = value
-        self.currentCost += self.cost_dict[self.vars[curStep-1]][value]
-        self.curStep+=1
+    def getPossibledomain(self,step: int):
+        prev = set( self.vars[i] for i in range(step) if self.vars[i] is not None)
+        possibleStep = set( i for i in range(len(self.vars)))
+        for p in prev:
+            possibleStep.remove(p)
+        defaultH = 0
+        
+        possibleStep = map(lambda x: [x,defaultH],list(possibleStep))
+        return possibleStep
+        
+    def orderedDomainValues(self,step:int):
+        return list(self.getPossibledomain(step))
+    def assignVariable(self,step: int, value: int):
+        prevCost = 0
+        if self.vars[step]!=None and step>0:
+            prevCost = self.cost_dict[self.vars[step-1]][self.vars[step]]
+        # print("assign",prevCost, self.currentCost - prevCost)
+        self.vars[step] = value
+        if step!=0:
+            self.currentCost = self.currentCost - prevCost + self.cost_dict[self.vars[step-1]][value]
+        self.curStep = step + 1
 
-    def unassignVariable(self,curStep: int):
-        self.var[cuStep] = NULL
-        self.currentCost -= self.cost_dict[var(Curstep-1)][var(Curstep)]
-        self.curStep-=1
+    def unassignVariable(self,step: int):
+        if step>0:
+            self.currentCost -= self.cost_dict[self.vars[step-1]][self.vars[step]]
+        self.vars[step] = None
+        # print(self.cost_dict[self.vars[step-1]][self.vars[step]],step-1,step)
+
+        self.curStep = step-1 
 
     def hasFullAssignment(self):
         return self.vars[-1] is not None

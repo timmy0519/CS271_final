@@ -1,4 +1,4 @@
-import PartialAssigned
+from PartialAssigned import PartialAssigned
 def BnB(p: PartialAssigned, Uinit: int) -> int: 
     curStep = p.pickUnAssignedVariable()
     domain = p.orderedDomainValues(curStep)
@@ -10,20 +10,24 @@ def BnB(p: PartialAssigned, Uinit: int) -> int:
     
     #DFS
     while stack:
-        curStep,domain = stack[-1]
-        if domain: # not empty
-            p.unassignVariable(curStep) # update currentcost
+        step,domain = stack[-1]
+        if not domain: # not empty
+            p.unassignVariable(step) # update currentcost
             stack.pop()
         else:
             val, h_cost = domain.pop()
-            p.assignVariable(curStep,val) # update currentcost
+            p.assignVariable(step,val) # update currentcost
+            # print(p.vars,p.currentCost)
+            if p.currentCost<0:
+                raise ValueError("negative current cost {}".format(p.currentCost))
             if  p.currentCost + h_cost >=U:
                 continue
             elif p.hasFullAssignment():
                 U = p.currentCost + h_cost;
-                bestAssignment = p.var
+                bestAssignment = list(p.vars)
             else:
                 var = p.pickUnAssignedVariable()
-                domain = p.orderDomainValues(curStep)
-                stack.append((curStep,domain))
-        return bestAssignment
+                domain = p.orderedDomainValues(p.curStep)
+                stack.append((p.curStep,domain))
+    # print(bestAssignment,">>")
+    return bestAssignment, U
