@@ -46,6 +46,7 @@ def main():
         if prev is not None:
             actualCost += mat[prev][v]
         prev = v
+    actionCost += mat[prev][solution[0]]
     if abs(actualCost-U)>0.0001:
         raise Exception("The difference of actualCost and BnB is {}".format(abs(actualCost-U)))
     
