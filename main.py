@@ -1,6 +1,8 @@
 from bnb import *
 from typing import List
 import argparse
+import signal
+
 def parseMatrix(filename: str,n:int ) -> List[List[int]]:
     dists = []
     try:
@@ -24,20 +26,32 @@ def parseMatrix(filename: str,n:int ) -> List[List[int]]:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i',help="input file in the format of tsp-problem-n-k-u-v-p")
+    parser.add_argument('-t',help="execution time")
     args = parser.parse_args()
 
     filename = args.i
+    excutionTime = args.t
     if not filename:
         filename = 'tsp-problem-10-5-10-1-1.txt'
+    if not excutionTime:
+        excutionTime = 10
     n,k,u,v = map(int,filename.split('-')[2:6])
     mat = parseMatrix(filename,n)
+    
     # error occurs
     if not mat:
         return
-        
+    
+    
+    
     p = PartialAssigned(mat,n)
-    solution, U = BnB(p,float('inf'))
-    print(solution,U)
+    solution ,U= None,None
+    
+    solution, U = BnB(p,float('inf'),excutionTime)
+
+    
+    if not solution:
+        return
     # test if the cost of the solution is properly calculated
     
     prev = None
@@ -47,6 +61,7 @@ def main():
             actualCost += mat[prev][v]
         prev = v
     actualCost += mat[prev][solution[0]]
+    print(solution,actualCost)
     if abs(actualCost-U)>0.0001:
         raise Exception("The difference of actualCost and BnB is {}".format(abs(actualCost-U)))
     
