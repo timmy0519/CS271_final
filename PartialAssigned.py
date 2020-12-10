@@ -40,16 +40,20 @@ class PartialAssigned:
             H_cost = 0
             tempDomain = [i[0] for i in domain if i!=d]
             if self.vars[0] is None:
-                #print("NO START")
                 pass
             else:
                 tempDomain.append(self.vars[0])
                 H_cost += self.cost_dict[self.vars[self.curStep-1]][d[0]]
-            tempGraph = self.buildGraph(tempDomain)
-            H_cost += tempGraph.KruskalMST()
+            tempDomain.sort() 
+            key = '-'.join(str(x) for x in tempDomain)
+            if key in self.mstcost_dict:
+                H_cost = self.mstcost_dict[key]
+            else:
+                tempGraph = self.buildGraph(tempDomain)
+                H_cost += tempGraph.KruskalMST()
+                self.mstcost_dict[key] = H_cost
+
             d[1] = H_cost
-            #print(self.vars, d, domain, H_cost)
-                
         domain.sort(key = lambda x: x[1])
         return domain
 
