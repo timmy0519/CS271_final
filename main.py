@@ -25,16 +25,16 @@ def parseMatrix(filename: str,n:int ) -> List[List[int]]:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i',help="input file in the format of tsp-problem-n-k-u-v-p")
-    parser.add_argument('-t',help="execution time")
+    parser.add_argument('-i',help="input file in the format of tsp-problem-n-k-u-v-p",
+                        default='tsp-problem-10-5-10-1-1.txt')
+    parser.add_argument('-t',help="execution time",type=int,default=10)
+    parser.add_argument('-a',help='select sls or bnb',default='bnb')
     args = parser.parse_args()
 
     filename = args.i
     excutionTime = args.t
-    if not filename:
-        filename = 'tsp-problem-10-5-10-1-1.txt'
-    if not excutionTime:
-        excutionTime = 10
+    approach = args.a
+ 
     n,k,u,v = map(int,filename.split('-')[2:6])
     mat = parseMatrix(filename,n)
     
@@ -47,7 +47,11 @@ def main():
     p = PartialAssigned(mat,n)
     solution ,U= None,None
     
-    solution, U = BnB(p,float('inf'),excutionTime)
+    if approach == 'bnb':
+        solution, U = BnB(p,float('inf'),excutionTime)
+    else:
+        # insert SLS here
+        solution,U = None,None
 
     
     if not solution:

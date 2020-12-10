@@ -48,6 +48,6 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
                         stack.append((p.curStep,domain))
         # print(bestAssignment,">>")
     except Exception as e:
-        print("time out\n")
+        print("time out")
     
     return bestAssignment, U
