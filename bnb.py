@@ -7,6 +7,9 @@ def handler(signum, frame):
 def BnB(p: PartialAssigned, Uinit: int, time: int) -> int: 
     signal.signal(signal.SIGALRM, handler)
     signal.alarm(time);
+    bestAssignment = None
+    U = Uinit
+
     try:
         
         curStep = p.pickUnAssignedVariable()
@@ -14,8 +17,6 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
         stack = []
         # push tuple onto the stack for DFS(curStep: int, domain: list)
         stack.append((curStep,domain)) 
-        bestAssignment = None
-        U = Uinit
         
         #DFS
         while stack:

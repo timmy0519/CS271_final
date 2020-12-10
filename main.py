@@ -33,7 +33,7 @@ def main():
 
     filename = args.i
     excutionTime = args.t
-    approach = args.a
+    approach = args.a.lower()
  
     n,k,u,v = map(int,filename.split('-')[2:6])
     mat = parseMatrix(filename,n)
@@ -52,9 +52,13 @@ def main():
     else:
         # insert SLS here
         solution,U = None,None
-
+    # domain = [i for i in range(n)]
+    # graph =  p.buildGraph(domain)
+    # u = graph.KruskalMST()
+    # print(u)
     
     if not solution:
+        print('approach: {} has no solution within {} seconds'.format(approach,excutionTime))
         return
     # test if the cost of the solution is properly calculated
     
