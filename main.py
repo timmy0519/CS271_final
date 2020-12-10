@@ -26,7 +26,7 @@ def parseMatrix(filename: str,n:int ) -> List[List[int]]:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i',help="input file in the format of tsp-problem-n-k-u-v-p")
-    parser.add_argument('-t',help="execution time")
+    parser.add_argument('-t',help="execution time", type = int)
     args = parser.parse_args()
 
     filename = args.i
@@ -41,13 +41,16 @@ def main():
     # error occurs
     if not mat:
         return
-    
-    
-    
+
     p = PartialAssigned(mat,n)
     solution ,U= None,None
-    
-    solution, U = BnB(p,float('inf'),excutionTime)
+
+    # domain = [i for i in range(n)]
+
+    # graph =  p.buildGraph(domain)
+    # u = graph.KruskalMST()
+    # print(u)
+    solution, U = BnB(p, float('inf'), excutionTime)
 
     
     if not solution:

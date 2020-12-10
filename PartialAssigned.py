@@ -1,3 +1,5 @@
+from Graph import Graph
+
 class PartialAssigned:
     cost_dict=[[]]; # Space complexity:O(2n)
     N = 0; # total number of city
@@ -21,18 +23,37 @@ class PartialAssigned:
     
     def pickUnAssignedVariable(self):
         return self.curStep
+
     def getPossibledomain(self,step: int):
         prev = set( self.vars[i] for i in range(step) if self.vars[i] is not None)
         possibleStep = set( i for i in range(len(self.vars)))
         for p in prev:
             possibleStep.remove(p)
         defaultH = 0
-        
-        possibleStep = map(lambda x: [x,defaultH],list(possibleStep))
+        possibleStep = map(lambda x: [x, defaultH],list(possibleStep))
         return possibleStep
         
     def orderedDomainValues(self,step:int):
-        return list(self.getPossibledomain(step))
+        domain = list(self.getPossibledomain(step))
+        for d in domain:
+            H_cost = 0
+            tempDomain = [i for i in domain if i!=d]
+            if self.vars[0] is None:
+                #print("NO START")
+                pass
+            else:
+                tempDomain.append([self.vars[0], 0])
+                #if self.vars[0] == 9: print(self.vars, d, domain, self.currentCost)
+                H_cost += self.cost_dict[self.vars[self.curStep-1]][d[0]]
+
+            tempGraph = self.buildGraph(tempDomain)
+            H_cost += tempGraph.KruskalMST()
+            d[1] = H_cost
+                
+        domain.sort(key = lambda x: x[1])
+        #if self.vars[0] == 9: print("DDD = ", domain)
+        return domain
+
     def assignVariable(self,step: int, value: int):
         prevCost = 0
         if self.vars[step]!=None and step>0:
@@ -41,8 +62,6 @@ class PartialAssigned:
         self.vars[step] = value
         if step!=0:
             self.currentCost = self.currentCost - prevCost + self.cost_dict[self.vars[step-1]][value]
-
-            
         self.curStep = step + 1
 
     def unassignVariable(self,step: int):
@@ -51,17 +70,19 @@ class PartialAssigned:
             # avoid errors from float pointer calculation
             if abs(self.currentCost)<0.00001:
                 self.currentCost = 0
-
-
         self.vars[step] = None
-        
-
         self.curStep = step-1 
 
     def hasFullAssignment(self):
         return self.vars[-1] is not None
+
     def buildGraph(self,domain: list):
-        pass
+        g = Graph(len(domain))
+        for i in range(len(domain)):
+            for j in range(0, i):
+                if self.cost_dict[i][j]!=float('inf') :
+                    g.addEdge(i, j, self.cost_dict[i][j])
+        return g
         
     
     
