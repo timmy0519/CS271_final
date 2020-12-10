@@ -37,7 +37,7 @@ def main():
         
     p = PartialAssigned(mat,n)
     solution, U = BnB(p,float('inf'))
-    
+    print(solution,U)
     # test if the cost of the solution is properly calculated
     
     prev = None

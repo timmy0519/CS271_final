@@ -20,14 +20,22 @@ def BnB(p: PartialAssigned, Uinit: int) -> int:
             # print(p.vars,p.currentCost)
             if p.currentCost<0:
                 raise ValueError("negative current cost {}".format(p.currentCost))
-            if  p.currentCost + h_cost >=U:
-                continue
-            elif p.hasFullAssignment():
-                U = p.currentCost + h_cost;
-                bestAssignment = list(p.vars)
+            if p.hasFullAssignment():
+                lastEdge = p.cost_dict[p.vars[-1]][p.vars[0]]
+                if p.currentCost + lastEdge >=U:
+                    continue
+                else:
+                    U = p.currentCost + lastEdge;
+                    bestAssignment = list(p.vars)
             else:
-                var = p.pickUnAssignedVariable()
-                domain = p.orderedDomainValues(p.curStep)
-                stack.append((p.curStep,domain))
+                if  p.currentCost + h_cost >=U:
+                    continue
+                # elif p.hasFullAssignment():
+                #     U = p.currentCost + h_cost;
+                #     bestAssignment = list(p.vars)
+                else:
+                    var = p.pickUnAssignedVariable()
+                    domain = p.orderedDomainValues(p.curStep)
+                    stack.append((p.curStep,domain))
     # print(bestAssignment,">>")
     return bestAssignment, U
