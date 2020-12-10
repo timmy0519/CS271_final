@@ -3,7 +3,8 @@ class Graph:
     def __init__(self, vertices):
         self.V = vertices  # No. of vertices
         self.graph = []  # default dictionary
- 
+        self.indexMap = {}
+
     def addEdge(self, u, v, w):
         self.graph.append([u, v, w])
  
@@ -23,24 +24,29 @@ class Graph:
             parent[yroot] = xroot
             rank[xroot] += 1
  
+    def markindex(self):
+        i = 0
+        for v in self.V: 
+            self.indexMap[v] = i
+            i+=1
+
     def KruskalMST(self):
-        result = [] 
+        self.markindex()
+        result = []
         i = 0
         e = 0
         self.graph = sorted(self.graph, key=lambda item: item[2])
- 
         parent = []
         rank = []
-        for node in range(self.V):
-            parent.append(node)
+        for node in range(len(self.V)):
+            parent.append(self.indexMap[self.V[node]])
             rank.append(0)
 
-        while e < self.V - 1:
+        while e < len(self.V) -1:
             u, v, w = self.graph[i]
             i = i + 1
-            x = self.find(parent, u)
-            y = self.find(parent, v)
-
+            x = self.find(parent, self.indexMap[u])
+            y = self.find(parent, self.indexMap[v])
             if x != y:
                 e = e + 1
                 result.append([u, v, w])

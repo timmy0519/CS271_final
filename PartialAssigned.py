@@ -6,6 +6,7 @@ class PartialAssigned:
     vars = []  #Space complexity: O(n)
     curStep = 0;
     currentCost = 0;
+    mstcost_dict = {}
     # cost_dict: Assume cost_dict is read-only, therefore we don't copy it. Instead we pass it by reference
     # Var: 
     def __init__(self,cost_dict,N):
@@ -37,21 +38,19 @@ class PartialAssigned:
         domain = list(self.getPossibledomain(step))
         for d in domain:
             H_cost = 0
-            tempDomain = [i for i in domain if i!=d]
+            tempDomain = [i[0] for i in domain if i!=d]
             if self.vars[0] is None:
                 #print("NO START")
                 pass
             else:
-                tempDomain.append([self.vars[0], 0])
-                #if self.vars[0] == 9: print(self.vars, d, domain, self.currentCost)
+                tempDomain.append(self.vars[0])
                 H_cost += self.cost_dict[self.vars[self.curStep-1]][d[0]]
-
             tempGraph = self.buildGraph(tempDomain)
             H_cost += tempGraph.KruskalMST()
             d[1] = H_cost
+            #print(self.vars, d, domain, H_cost)
                 
         domain.sort(key = lambda x: x[1])
-        #if self.vars[0] == 9: print("DDD = ", domain)
         return domain
 
     def assignVariable(self,step: int, value: int):
@@ -77,11 +76,11 @@ class PartialAssigned:
         return self.vars[-1] is not None
 
     def buildGraph(self,domain: list):
-        g = Graph(len(domain))
+        g = Graph(domain)
         for i in range(len(domain)):
             for j in range(0, i):
-                if self.cost_dict[i][j]!=float('inf') :
-                    g.addEdge(i, j, self.cost_dict[i][j])
+                if self.cost_dict[domain[i]][domain[j]]!=float('inf') :
+                    g.addEdge(domain[i], domain[j], self.cost_dict[domain[i]][domain[j]])
         return g
         
     

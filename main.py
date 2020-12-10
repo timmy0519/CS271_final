@@ -46,12 +46,10 @@ def main():
     solution ,U= None,None
 
     # domain = [i for i in range(n)]
-
     # graph =  p.buildGraph(domain)
     # u = graph.KruskalMST()
     # print(u)
     solution, U = BnB(p, float('inf'), excutionTime)
-
     
     if not solution:
         return
