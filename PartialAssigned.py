@@ -31,20 +31,27 @@ class PartialAssigned:
         for p in prev:
             possibleStep.remove(p)
         defaultH = 0
-        possibleStep = map(lambda x: [x, defaultH],list(possibleStep))
+        possibleStep = list(map(lambda x: [x, defaultH],list(possibleStep)))
         return possibleStep
         
     def orderedDomainValues(self,step:int):
-        domain = list(self.getPossibledomain(step))
+        domain = self.getPossibledomain(step)
+
+        if step==0:
+            return domain
+        
         for d in domain:
+            
             H_cost = 0
-            tempDomain = [i[0] for i in domain if i!=d]
+
+            tempDomain = [i[0] for i in domain]
             if self.vars[0] is None:
                 pass
             else:
-                tempDomain.append(self.vars[0])
-                H_cost += self.cost_dict[self.vars[self.curStep-1]][d[0]]
+                H_cost+= self.cost_dict[self.vars[self.curStep-1]][d[0]]
+                tempDomain.append(self.vars[0])          
             tempDomain.sort() 
+
             key = '-'.join(str(x) for x in tempDomain)
             if key in self.mstcost_dict:
                 H_cost = self.mstcost_dict[key]
@@ -52,8 +59,8 @@ class PartialAssigned:
                 tempGraph = self.buildGraph(tempDomain)
                 H_cost += tempGraph.KruskalMST()
                 self.mstcost_dict[key] = H_cost
-
-            d[1] = H_cost
+           
+            d[1] = H_cost 
         domain.sort(key = lambda x: x[1])
         return domain
 
