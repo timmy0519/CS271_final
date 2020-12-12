@@ -36,6 +36,7 @@ def main():
     if not excutionTime:
         excutionTime = 10
     n,k,u,v = map(int,filename.split('-')[2:6])
+    print("n= {n},k= {k},u= {u},v ={v}".format(n=n,k=k,u=u,v=v))
     mat = parseMatrix(filename,n)
     
     # error occurs
