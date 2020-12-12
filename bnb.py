@@ -1,5 +1,7 @@
 import signal
 from PartialAssigned import PartialAssigned
+import time as realtime
+
 def handler(signum, frame):
     ("Forever is over!")
     raise Exception("end of time")
@@ -9,7 +11,9 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
     signal.alarm(time);
     bestAssignment = None
     U = Uinit
+    start_time = realtime.time()
 
+    
     try:
         curStep = p.pickUnAssignedVariable()
         domain = p.orderedDomainValues(curStep)
@@ -50,5 +54,5 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
         # print(bestAssignment,">>")
     except Exception as e:
         print("time out")
-    
+    print("--- %s seconds ---" % (realtime.time() - start_time))
     return bestAssignment, U
