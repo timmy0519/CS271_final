@@ -49,9 +49,11 @@ def main():
     # graph =  p.buildGraph(domain)
     # u = graph.KruskalMST()
     # print(u)
+    # return
     solution, U = BnB(p, float('inf'), excutionTime)
     
     if not solution:
+        print("no solution?")
         return
     # test if the cost of the solution is properly calculated
     
