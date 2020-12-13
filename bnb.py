@@ -13,7 +13,7 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
     U = Uinit
     start_time = realtime.time()
 
-    
+    timeOut = False
     try:
         curStep = p.pickUnAssignedVariable()
         domain = p.orderedDomainValues(curStep)
@@ -35,6 +35,7 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
                 if p.currentCost<0:
                     raise ValueError("negative current cost {}".format(p.currentCost))
                 if p.hasFullAssignment():
+                    
                     lastEdge = p.cost_dict[p.vars[-1]][p.vars[0]]
                     if p.currentCost + lastEdge >=U:
                         continue
@@ -43,6 +44,7 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
                         bestAssignment = list(p.vars)
                 else:
                     if  p.currentCost + h_cost >=U:
+
                         continue
                     # elif p.hasFullAssignment():
                     #     U = p.currentCost + h_cost;
@@ -53,6 +55,11 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
                         stack.append((step+1,domain))
         # print(bestAssignment,">>")
     except Exception as e:
-        print("time out")
-    print("--- %s seconds ---" % (realtime.time() - start_time))
+        timeOut = True
+        # print("time out")
+    if timeOut:
+        print('NA')
+    else:
+        print("%.4f," % (realtime.time() - start_time))
+    
     return bestAssignment, U
