@@ -1,4 +1,5 @@
 from SLS import *
+from time import time as timestamp
 from typing import List
 import argparse
 import signal
@@ -32,9 +33,9 @@ def main():
     filename = args.i
     excutionTime = args.t
     if not filename:
-        filename = 'tsp-problem-10-5-10-1-1.txt'
+        filename = 'tsp-problem-25-6-100-5-1.txt'
     if not excutionTime:
-        excutionTime = 10
+        excutionTime = 900
     n,k,u,v = map(int,filename.split('-')[2:6])
     print("n= {n},k= {k},u= {u},v ={v}".format(n=n,k=k,u=u,v=v))
     mat = parseMatrix(filename,n)
@@ -42,12 +43,15 @@ def main():
     # error occurs
     if not mat:
         return
-
+    
     s = SLS(mat,n)
     solution ,U= None,None
-    solution ,U = s.initializeState()
+    
+    solution ,U = s.GRASP(excutionTime)
+   
+    
     print(solution, U)
-    return
+    
     
     if not solution:
         print("no solution?")
@@ -63,7 +67,7 @@ def main():
     actualCost += mat[prev][solution[0]]
     print(solution,actualCost)
     if abs(actualCost-U)>0.0001:
-        raise Exception("The difference of actualCost and BnB is {}".format(abs(actualCost-U)))
+        raise Exception("The difference of actualCost and SLS is {}".format(abs(actualCost-U)))
     
 if __name__ == "__main__":
     main()
