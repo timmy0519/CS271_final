@@ -45,9 +45,9 @@ class SLS:
         except Exception as e:
             timeOut = True
         if timeOut:
-          print('NA')
+          print('Time out')
         else:
-           print("%.4f," % (realtime.time() - start_time))
+           print("Time = %.4f" % (realtime.time() - start_time))
               
 
 

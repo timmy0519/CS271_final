@@ -65,7 +65,6 @@ def main():
             actualCost += mat[prev][v]
         prev = v
     actualCost += mat[prev][solution[0]]
-    print(solution,actualCost)
     if abs(actualCost-U)>0.0001:
         raise Exception("The difference of actualCost and SLS is {}".format(abs(actualCost-U)))
     

@@ -58,8 +58,8 @@ def BnB(p: PartialAssigned, Uinit: int, time: int) -> int:
         timeOut = True
         # print("time out")
     if timeOut:
-        print('NA')
+        print('Time out')
     else:
-        print("%.4f," % (realtime.time() - start_time))
+        print("Time = %.4f" % (realtime.time() - start_time))
     
     return bestAssignment, U

@@ -37,7 +37,7 @@ def main():
         excutionTime = 10
     n,k,u,v = map(int,filename.split('-')[2:6])
     # print("n= {n},k= {k},u= {u},v ={v}".format(n=n,k=k,u=u,v=v))
-    print(str(n)+','+str(k)+','+str(u)+','+str(v)+',')
+    print("n= {n},k= {k},u= {u},v ={v}".format(n=n,k=k,u=u,v=v))
     mat = parseMatrix(filename,n)
     
     # error occurs
@@ -53,7 +53,7 @@ def main():
     # print(u)
     # return
     solution, U = BnB(p, float('inf'), excutionTime)
-    
+    print(solution, U)
     if not solution:
         print("no solution?")
         return
@@ -67,8 +67,6 @@ def main():
         prev = v
     actualCost += mat[prev][solution[0]]
     # print(solution,actualCost)
-    print('%.4f'% (actualCost)+',')
-    print()
     if abs(actualCost-U)>0.0001:
         raise Exception("The difference of actualCost and BnB is {}".format(abs(actualCost-U)))
     
