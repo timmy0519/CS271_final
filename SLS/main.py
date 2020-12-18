@@ -33,7 +33,7 @@ def main():
     filename = args.i
     excutionTime = args.t
     if not filename:
-        filename = 'tsp-problem-25-6-100-5-1.txt'
+        filename = 'tsp-problem-10-5-10-1-1.txt'
     if not excutionTime:
         excutionTime = 900
     n,k,u,v = map(int,filename.split('-')[2:6])

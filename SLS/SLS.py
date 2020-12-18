@@ -58,7 +58,7 @@ class SLS:
         path = []
         currentCost = 0
         visited = set()
-        currPosition = 24
+        currPosition = random.randint(0, self.N-1)
         nextPosition = 0;
         currentCost = 0
         if len(self.nearestNeighbors) == 0:
